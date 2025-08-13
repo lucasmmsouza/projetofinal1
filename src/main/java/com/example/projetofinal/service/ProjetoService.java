@@ -33,8 +33,14 @@ public class ProjetoService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProjetoViewDTO> findAll() {
-        return projetoRepository.findAll().stream()
+    public List<ProjetoViewDTO> findAll(String areaTematica) {
+        List<Projeto> projetos;
+        if (areaTematica != null && !areaTematica.isBlank()) {
+            projetos = projetoRepository.findByAreaTematica(areaTematica);
+        } else {
+            projetos = projetoRepository.findAll();
+        }
+        return projetos.stream()
                 .map(this::toProjetoViewDTO)
                 .collect(Collectors.toList());
     }
@@ -124,6 +130,9 @@ public class ProjetoService {
         }
         projetoRepository.deleteById(id);
     }
+
+
+
 
     // Método auxiliar para converter a entidade Projeto em seu DTO de visualização.
     private ProjetoViewDTO toProjetoViewDTO(Projeto projeto) {

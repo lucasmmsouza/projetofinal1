@@ -34,4 +34,13 @@ public interface ProjetoRepository extends JpaRepository<Projeto, Long> {
      */
     @Query("SELECT p FROM Projeto p JOIN p.avaliacoes a WHERE p.status = 'AVALIADO' GROUP BY p ORDER BY AVG(a.nota) DESC")
     List<Projeto> findProjetosVencedores();
+
+    /**
+     * Busca projetos por área temática.
+     *
+     * @param areaTematica A área para busca.
+     * @return Lista de projetos da área temática.
+     */
+    List<Projeto> findByAreaTematica(String areaTematica);
+
 }

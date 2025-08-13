@@ -21,8 +21,9 @@ public class ProjetoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProjetoViewDTO>> getAllProjects() {
-        return ResponseEntity.ok(projetoService.findAll());
+    public ResponseEntity<List<ProjetoViewDTO>> getAllProjects(
+            @RequestParam(required = false) String areaTematica) {
+        return ResponseEntity.ok(projetoService.findAll(areaTematica));
     }
 
     @GetMapping("/{id}")
@@ -58,4 +59,6 @@ public class ProjetoController {
         projetoService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    // O MÉTODO DUPLICADO QUE ESTAVA AQUI FOI REMOVIDO. - lucas
 }

@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record PremioCreateDTO(
+public record PremioUpdateDTO(
         @NotBlank(message = "O nome do prêmio não pode estar em branco.")
         String nome,
         @NotBlank(message = "A descrição não pode estar em branco.")
