@@ -60,24 +60,13 @@ public class AutorService {
      */
     @Transactional
     public void delete(Long id) {
-        // 4. Implemente a nova lógica de deleção
         Autor autor = autorRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Autor não encontrado para exclusão com o id: " + id));
 
-        // Pega uma cópia da lista de projetos do autor
-        Set<Projeto> projetosParaDeletar = new HashSet<>(autor.getProjetos());
-
-        if (!projetosParaDeletar.isEmpty()) {
-            // Para cada projeto, remove a associação com todos os seus autores
-            // para evitar problemas de concorrência na tabela de junção.
-            for (Projeto projeto : projetosParaDeletar) {
-                projeto.getAutores().clear();
-            }
-            // Deleta todos os projetos de uma vez
-            projetoRepository.deleteAll(projetosParaDeletar);
+        for (Projeto projeto : new HashSet<>(autor.getProjetos())) {
+            projeto.getAutores().remove(autor);
         }
 
-        // Finalmente, apaga o autor, que agora não tem mais associações
         autorRepository.delete(autor);
     }
 
