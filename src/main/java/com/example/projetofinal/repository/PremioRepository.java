@@ -11,7 +11,4 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface PremioRepository extends JpaRepository<Premio, Long> {
-    // Nenhuma consulta personalizada é necessária com base nos requisitos.
-    // O JpaRepository já fornece métodos como:
-    // save(), findById(), findAll(), deleteById(), etc.
 }

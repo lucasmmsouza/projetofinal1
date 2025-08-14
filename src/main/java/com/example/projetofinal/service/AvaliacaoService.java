@@ -45,7 +45,6 @@ public class AvaliacaoService {
         Avaliador avaliador = avaliadorRepository.findById(dto.avaliadorId())
                 .orElseThrow(() -> new EntityNotFoundException("Avaliador não encontrado com o id: " + dto.avaliadorId()));
 
-        // 2. Aplica as regras de negócio
         // Regra: Um avaliador não pode avaliar um projeto do qual seja autor.
         boolean isAutor = projeto.getAutores().stream().anyMatch(autor -> autor.getDadosPessoais().equals(avaliador.getDadosPessoais()));
         if (isAutor) {
@@ -58,7 +57,6 @@ public class AvaliacaoService {
                     throw new IllegalArgumentException("Conflito: Este avaliador já avaliou este projeto.");
                 });
 
-        // 3. Cria e salva a nova avaliação
         Avaliacao novaAvaliacao = new Avaliacao();
         novaAvaliacao.setProjeto(projeto);
         novaAvaliacao.setAvaliador(avaliador);
@@ -68,11 +66,9 @@ public class AvaliacaoService {
 
         Avaliacao avaliacaoSalva = avaliacaoRepository.save(novaAvaliacao);
 
-        // 4. Atualiza o status do projeto para "AVALIADO"
         projeto.setStatus("AVALIADO");
         projetoRepository.save(projeto);
 
-        // 5. Retorna o DTO de visualização
         return toAvaliacaoViewDTO(avaliacaoSalva);
     }
 

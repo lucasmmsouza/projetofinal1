@@ -10,5 +10,4 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface AvaliadorRepository extends JpaRepository<Avaliador, Long> {
-    // Métodos CRUD são herdados do JpaRepository.
 }

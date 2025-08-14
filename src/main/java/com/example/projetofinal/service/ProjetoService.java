@@ -52,9 +52,7 @@ public class ProjetoService {
         return toProjetoViewDTO(projeto);
     }
 
-    /**
-     * [cite_start]Lista os projetos que ainda não foram avaliados[cite: 218].
-     */
+
     @Transactional(readOnly = true)
     public List<ProjetoViewDTO> findUnevaluated() {
         return projetoRepository.findByStatus("SUBMETIDO").stream()
@@ -62,20 +60,16 @@ public class ProjetoService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * [cite_start]Lista os projetos vencedores, calculando a nota final média de cada um[cite: 221].
-     */
+
     @Transactional(readOnly = true)
     public List<ProjetoVencedorDTO> findWinningProjects() {
         List<Projeto> projetos = projetoRepository.findProjetosVencedores();
         return projetos.stream().map(projeto -> {
-            // Calcula a média das notas das avaliações
             BigDecimal notaMedia = projeto.getAvaliacoes().stream()
                     .map(a -> a.getNota())
                     .reduce(BigDecimal.ZERO, BigDecimal::add)
                     .divide(BigDecimal.valueOf(projeto.getAvaliacoes().size()), 2, RoundingMode.HALF_UP);
 
-            // Extrai os nomes dos autores
             List<String> nomesAutores = projeto.getAutores().stream()
                     .map(Autor::getDadosPessoais)
                     .collect(Collectors.toList());
@@ -87,7 +81,6 @@ public class ProjetoService {
 
     @Transactional
     public ProjetoViewDTO create(ProjetoCreateDTO dto) {
-        // Busca as entidades relacionadas
         Premio premio = premioRepository.findById(dto.premioId())
                 .orElseThrow(() -> new EntityNotFoundException("Prêmio não encontrado com o id: " + dto.premioId()));
         Set<Autor> autores = new HashSet<>(autorRepository.findAllById(dto.autorIds()));
@@ -95,7 +88,6 @@ public class ProjetoService {
             throw new EntityNotFoundException("Um ou mais autores não foram encontrados.");
         }
 
-        // Cria e salva a nova entidade Projeto
         Projeto novoProjeto = new Projeto();
         novoProjeto.setTitulo(dto.titulo());
         novoProjeto.setResumo(dto.resumo());
