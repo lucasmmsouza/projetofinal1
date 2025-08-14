@@ -47,7 +47,7 @@ public class AvaliacaoService {
 
         // 2. Aplica as regras de negócio
         // Regra: Um avaliador não pode avaliar um projeto do qual seja autor.
-        boolean isAutor = projeto.getAutores().stream().anyMatch(autor -> autor.getId().equals(avaliador.getId()));
+        boolean isAutor = projeto.getAutores().stream().anyMatch(autor -> autor.getDadosPessoais().equals(avaliador.getDadosPessoais()));
         if (isAutor) {
             throw new IllegalArgumentException("Conflito: O avaliador é um dos autores do projeto.");
         }
